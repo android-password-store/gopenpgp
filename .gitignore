@@ -8,3 +8,8 @@ vendor
 reports
 .idea
 v2
+.go/
+.gradle/
+build/
+gomobile
+gobind
