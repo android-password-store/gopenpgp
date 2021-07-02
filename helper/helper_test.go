@@ -156,6 +156,24 @@ func TestArmoredBinaryMessageEncryption(t *testing.T) {
 	assert.Exactly(t, plainData, decrypted)
 }
 
+func TestBinaryMessageEncryption(t *testing.T) {
+	plainData := []byte("Secret message")
+
+	binary, err := EncryptBinaryMessage(readTestFile("keyring_privateKey", false), plainData)
+
+	if err != nil {
+		t.Fatal("Expected no error when encrypting, got:", err)
+	}
+
+	decrypted, err := DecryptBinaryMessage(readTestFile("keyring_privateKey", false), testMailboxPassword, binary)
+
+	if err != nil {
+		t.Fatal("Expected no error when decrypting, got:", err)
+	}
+
+	assert.Exactly(t, plainData, decrypted)
+}
+
 func TestEncryptSignArmoredDetached(t *testing.T) {
 	plainData := []byte("Secret message")
 	privateKeyString := readTestFile("keyring_privateKey", false)
