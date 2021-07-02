@@ -191,6 +191,14 @@ func DecryptBinaryMessageArmored(privateKey string, passphrase []byte, ciphertex
 	return message.GetBinary(), nil
 }
 
+func DecryptBinaryMessage(privateKey string, passphrase []byte, ciphertext []byte) ([]byte, error) {
+	message, err := decryptMessage(privateKey, passphrase, crypto.NewPGPMessage(ciphertext))
+	if err != nil {
+		return nil, err
+	}
+	return message.GetBinary(), nil
+}
+
 // encryptSignArmoredDetached takes a public key for encryption,
 // a private key and its passphrase for signature, and the plaintext data
 // Returns an armored ciphertext and a detached armored encrypted signature.
