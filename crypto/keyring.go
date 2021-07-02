@@ -105,7 +105,7 @@ func (keyRing *KeyRing) CountDecryptionEntities() int {
 }
 
 // GetIdentities returns the list of identities associated with this key ring.
-func (keyRing *KeyRing) GetIdentities() IdentitySlice {
+func (keyRing *KeyRing) GetIdentities() *IdentitySlice {
 	var identities []*Identity
 	for _, e := range keyRing.entities {
 		for _, id := range e.Identities {
@@ -115,7 +115,7 @@ func (keyRing *KeyRing) GetIdentities() IdentitySlice {
 			})
 		}
 	}
-	return IdentitySlice{identities: identities}
+	return &IdentitySlice{identities: identities}
 }
 
 // GetAt returns the item at index n for the given identity slice
