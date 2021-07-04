@@ -24,6 +24,10 @@ type Identity struct {
 	Email string
 }
 
+type IdentitySlice struct {
+	identities []*Identity
+}
+
 // --- New keyrings
 
 // NewKeyRing creates a new KeyRing, empty if key is nil.
@@ -101,7 +105,7 @@ func (keyRing *KeyRing) CountDecryptionEntities() int {
 }
 
 // GetIdentities returns the list of identities associated with this key ring.
-func (keyRing *KeyRing) GetIdentities() []*Identity {
+func (keyRing *KeyRing) GetIdentities() *IdentitySlice {
 	var identities []*Identity
 	for _, e := range keyRing.entities {
 		for _, id := range e.Identities {
@@ -111,7 +115,17 @@ func (keyRing *KeyRing) GetIdentities() []*Identity {
 			})
 		}
 	}
-	return identities
+	return &IdentitySlice{identities: identities}
+}
+
+// GetAt returns the item at index n for the given identity slice
+func (identitySlice *IdentitySlice) GetAt(n int) *Identity {
+	return identitySlice.identities[n]
+}
+
+// Len returns the length of the IdentitySlice
+func (identitySlice *IdentitySlice) Len() int {
+	return len(identitySlice.identities)
 }
 
 // CanVerify returns true if any of the keys in the keyring can be used for verification.
