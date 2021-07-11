@@ -1,8 +1,13 @@
 # GopenPGP V2
-[![Build Status](https://travis-ci.org/ProtonMail/gopenpgp.svg?branch=master)](https://travis-ci.org/ProtonMail/gopenpgp)
 
 GopenPGP is a high-level OpenPGP library built on top of [a fork of the golang
 crypto library](https://github.com/ProtonMail/crypto).
+
+> This fork of GopenPGP was created for two reasons:
+> 1. Allow publishing `gomobile` generated Android libraries to MavenCentral
+> 2. Have a place to test out any APIs required by APS before upstreaming them.
+>
+> Eventually we want this fork to *only* be used for publishing, with all API changes moved upstream.
 
 **Table of Contents**
 
