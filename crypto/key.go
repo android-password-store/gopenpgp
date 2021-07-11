@@ -360,6 +360,14 @@ func (key *Key) GetKeyID() uint64 {
 	return key.entity.PrimaryKey.KeyId
 }
 
+func (key *Key) GetUserName() string {
+	return key.entity.PrimaryIdentity().UserId.Name
+}
+
+func (key *Key) GetUserEmail() string {
+	return key.entity.PrimaryIdentity().UserId.Email
+}
+
 // GetFingerprint gets the fingerprint from the key.
 func (key *Key) GetFingerprint() string {
 	return hex.EncodeToString(key.entity.PrimaryKey.Fingerprint)

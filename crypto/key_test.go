@@ -395,6 +395,17 @@ func TestGetEntity(t *testing.T) {
 	assert.IsType(t, &openpgp.Entity{}, entity)
 }
 
+func TestGetUserNameAndEmail(t *testing.T) {
+	key, err := GenerateKey(keyTestName, keyTestDomain, "x25519", 256)
+	if err != nil {
+		panic("Cannot generate key:" + err.Error())
+	}
+	userName := key.GetUserName()
+	email := key.GetUserEmail()
+	assert.Equal(t, keyTestName, userName)
+	assert.Equal(t, keyTestDomain, email)
+}
+
 func TestToPublic(t *testing.T) {
 	privateKey, err := NewKeyFromArmored(readTestFile("keyring_privateKey", false))
 	if err != nil {
