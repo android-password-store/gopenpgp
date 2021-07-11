@@ -88,8 +88,8 @@ func initKeyRings() {
 
 func TestIdentities(t *testing.T) {
 	identities := keyRingTestPrivate.GetIdentities()
-	assert.Len(t, identities.identities, 1)
-	assert.Exactly(t, identities.GetAt(0), testIdentity)
+	assert.Len(t, identities, 1)
+	assert.Exactly(t, identities[0], testIdentity)
 }
 
 func TestFilterExpiredKeys(t *testing.T) {
