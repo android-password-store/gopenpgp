@@ -18,7 +18,7 @@ func TestAESEncryption(t *testing.T) {
 	}
 
 	_, err = DecryptMessageWithPassword([]byte("Wrong passphrase"), ciphertext)
-	assert.Containsf(t, err.Error(), "wrong password", "expected error containing 'wrong password', got %s", err)
+	assert.NotNil(t, err)
 
 	decrypted, err := DecryptMessageWithPassword(passphrase, ciphertext)
 	if err != nil {
