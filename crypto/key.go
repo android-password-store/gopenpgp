@@ -156,7 +156,7 @@ func (key *Key) Unlock(passphrase []byte) (*Key, error) {
 	}
 
 	for _, sub := range unlockedKey.entity.Subkeys {
-		if sub.PrivateKey != nil {
+		if sub.PrivateKey != nil && !sub.PrivateKey.Dummy() {
 			if err := sub.PrivateKey.Decrypt(passphrase); err != nil {
 				return nil, errors.Wrap(err, "gopenpgp: error in unlocking sub key")
 			}
@@ -280,13 +280,19 @@ func (key *Key) IsLocked() (bool, error) {
 		return true, errors.New("gopenpgp: a public key cannot be locked")
 	}
 
+	encryptedKeys := 0
+
 	for _, sub := range key.entity.Subkeys {
-		if sub.PrivateKey != nil && !sub.PrivateKey.Encrypted {
-			return false, nil
+		if sub.PrivateKey != nil && !sub.PrivateKey.Dummy() && sub.PrivateKey.Encrypted {
+			encryptedKeys++
 		}
 	}
 
-	return key.entity.PrivateKey.Encrypted, nil
+	if key.entity.PrivateKey.Encrypted {
+		encryptedKeys++
+	}
+
+	return encryptedKeys > 0, nil
 }
 
 // IsUnlocked checks if a private key is unlocked.
@@ -295,48 +301,25 @@ func (key *Key) IsUnlocked() (bool, error) {
 		return true, errors.New("gopenpgp: a public key cannot be unlocked")
 	}
 
+	encryptedKeys := 0
+
 	for _, sub := range key.entity.Subkeys {
-		if sub.PrivateKey != nil && sub.PrivateKey.Encrypted {
-			return false, nil
+		if sub.PrivateKey != nil && !sub.PrivateKey.Dummy() && sub.PrivateKey.Encrypted {
+			encryptedKeys++
 		}
 	}
 
-	return !key.entity.PrivateKey.Encrypted, nil
+	if key.entity.PrivateKey.Encrypted {
+		encryptedKeys++
+	}
+
+	return encryptedKeys == 0, nil
 }
 
 // Check verifies if the public keys match the private key parameters by
 // signing and verifying.
+// Deprecated: all keys are now checked on parsing.
 func (key *Key) Check() (bool, error) {
-	var err error
-	testSign := bytes.Repeat([]byte{0x01}, 64)
-	testReader := bytes.NewReader(testSign)
-
-	if !key.IsPrivate() {
-		return false, errors.New("gopenpgp: can check only private key")
-	}
-
-	unlocked, err := key.IsUnlocked()
-	if err != nil {
-		return false, err
-	}
-
-	if !unlocked {
-		return false, errors.New("gopenpgp: key is not unlocked")
-	}
-
-	var signBuf bytes.Buffer
-
-	if err = openpgp.DetachSign(&signBuf, key.entity, testReader, nil); err != nil {
-		return false, errors.New("gopenpgp: unable to sign with key")
-	}
-
-	testReader = bytes.NewReader(testSign)
-	signer, err := openpgp.CheckDetachedSignature(openpgp.EntityList{key.entity}, testReader, &signBuf, nil)
-
-	if signer == nil || err != nil {
-		return false, nil
-	}
-
 	return true, nil
 }
 
