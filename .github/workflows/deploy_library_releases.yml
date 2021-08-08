@@ -24,3 +24,11 @@ jobs:
         ORG_GRADLE_PROJECT_mavenPassword: ${{ secrets.NEXUS_PUBLISH_PASSWORD }}
         ORG_GRADLE_PROJECT_signingKey: ${{ secrets.NEXUS_PUBLISH_GPG_KEY }}
         ORG_GRADLE_PROJECT_signingPassword: ${{ secrets.NEXUS_PUBLISH_GPG_KEY_PASSWORD }}
+
+    - name: Close and release repository
+      uses: burrunan/gradle-cache-action@03c71a8ba93d670980695505f48f49daf43704a6
+      with:
+        arguments: closeAndReleaseRepository
+      env:
+        ORG_GRADLE_PROJECT_mavenUsername: ${{ secrets.NEXUS_PUBLISH_USERNAME }}
+        ORG_GRADLE_PROJECT_mavenPassword: ${{ secrets.NEXUS_PUBLISH_PASSWORD }}
