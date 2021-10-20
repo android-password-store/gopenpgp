@@ -6,11 +6,12 @@ plugins {
 group = "com.github.android-password-store"
 version = "0.1.6"
 
-tasks.register<Exec>("buildGomobile") {
+val buildGoMobile = tasks.register<Exec>("buildGomobile") {
   commandLine("./build.sh", "android")
 }
 
-tasks.getByName("publish").dependsOn(tasks.getByName("buildGomobile"))
+tasks.publish.configure { dependsOn(buildGoMobile) }
+tasks.build.configure { dependsOn(buildGoMobile) }
 
 publishing {
   publications {
