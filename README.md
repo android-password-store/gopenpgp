@@ -3,6 +3,9 @@
 GopenPGP is a high-level OpenPGP library built on top of [a fork of the golang
 crypto library](https://github.com/ProtonMail/crypto).
 
+> This fork is now unmaintained and no longer used by Android Password Store.
+> 
+> ## Why this fork?
 > This fork of GopenPGP was created for two reasons:
 > 1. Allow publishing `gomobile` generated Android libraries to MavenCentral
 > 2. Have a place to test out any APIs required by APS before upstreaming them.
